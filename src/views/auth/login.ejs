@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTrack 360 - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2.5rem;
+            max-width: 800px;
+            width: 100%;
+        }
+        .role-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .role-card {
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: white;
+            height: 100%;
+        }
+        .role-card:hover {
+            border-color: #4CAF50;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.2);
+        }
+        .role-card.selected {
+            border-color: #4CAF50;
+            background-color: #f1f8e9;
+        }
+        .role-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+            transition: all 0.3s ease;
+        }
+        .role-card:hover .role-icon {
+            transform: scale(1.1);
+        }
+        .btn-primary {
+            background: #4CAF50;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        .form-control {
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        }
+        #loginForm {
+            display: none;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .back-button {
+            color: #666;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            color: #4CAF50;
+            background-color: #f1f8e9;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .login-header h2 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .login-header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+        .role-description {
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+        .alert {
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>EduTrack 360</h2>
+            <p>Sistema de Gestión Educativa</p>
+        </div>
+
+        <% if (error_msg && error_msg.length > 0) { %>
+            <div class="alert alert-danger">
+                <%= error_msg %>
+            </div>
+        <% } %>
+
+        <% if (success_msg && success_msg.length > 0) { %>
+            <div class="alert alert-success">
+                <%= success_msg %>
+            </div>
+        <% } %>
+
+        <!-- Selector de Roles -->
+        <div id="roleSelector">
+            <h5 class="text-center mb-4">Selecciona tu rol para continuar</h5>
+            <div class="role-cards">
+                <div class="role-card" onclick="selectRole('admin')">
+                    <div class="role-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h5>Administrador</h5>
+                    <p class="role-description">Gestión completa del sistema</p>
+                </div>
+                <div class="role-card" onclick="selectRole('docente')">
+                    <div class="role-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h5>Docente</h5>
+                    <p class="role-description">Gestión de cursos y calificaciones</p>
+                </div>
+                <div class="role-card" onclick="selectRole('estudiante')">
+                    <div class="role-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h5>Estudiante</h5>
+                    <p class="role-description">Acceso a cursos y calificaciones</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Login -->
+        <div id="loginForm">
+            <a href="#" class="back-button" onclick="showRoleSelector()">
+                <i class="fas fa-arrow-left me-2"></i> Volver a selección de rol
+            </a>
+            <h5 class="text-center mb-4">Iniciar sesión como <span id="selectedRole"></span></h5>
+            <form action="/auth/login" method="POST">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectRole(role) {
+            // Remover la clase selected de todas las tarjetas
+            document.querySelectorAll('.role-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Añadir la clase selected a la tarjeta seleccionada
+            event.currentTarget.classList.add('selected');
+            
+            // Mostrar el formulario con una animación suave
+            setTimeout(() => {
+                document.getElementById('roleSelector').style.display = 'none';
+                document.getElementById('loginForm').style.display = 'block';
+            }, 300);
+            
+            const roleNames = {
+                'admin': 'Administrador',
+                'docente': 'Docente',
+                'estudiante': 'Estudiante'
+            };
+            document.getElementById('selectedRole').textContent = roleNames[role];
+        }
+
+        function showRoleSelector() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('roleSelector').style.display = 'block';
+        }
+    </script>
+</body>
+</html> 
