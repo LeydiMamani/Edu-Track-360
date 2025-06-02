@@ -1,0 +1,162 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <i class="fas fa-user-circle fa-4x" style="color: #ffffff; margin-bottom: 1rem;"></i>
+        <h4><%= user.firstName %> <%= user.lastName %></h4>
+        <small class="text-muted"><%= user.role %></small>
+    </div>
+
+    <div class="sidebar-menu">
+        <% if (user.role === 'admin') { %>
+            <a href="/admin/dashboard" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/admin/users" class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Usuarios</span>
+            </a>
+            <a href="/admin/courses" class="menu-item">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Cursos</span>
+            </a>
+            <a href="/admin/teachers" class="menu-item">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Profesores</span>
+            </a>
+            <a href="/admin/students" class="menu-item">
+                <i class="fas fa-user-graduate"></i>
+                <span>Estudiantes</span>
+            </a>
+            <a href="/admin/reports" class="menu-item">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reportes</span>
+            </a>
+        <% } else if (user.role === 'teacher') { %>
+            <a href="/teacher/dashboard" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/teacher/courses" class="menu-item">
+                <i class="fas fa-book"></i>
+                <span>Mis Cursos</span>
+            </a>
+            <a href="/teacher/assignments" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Tareas</span>
+            </a>
+            <a href="/teacher/grades" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Calificaciones</span>
+            </a>
+            <a href="/teacher/attendance" class="menu-item">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Asistencia</span>
+            </a>
+            <a href="/teacher/reports" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Reportes</span>
+            </a>
+        <% } else if (user.role === 'student') { %>
+            <a href="/student/dashboard" class="menu-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/student/courses" class="menu-item">
+                <i class="fas fa-book"></i>
+                <span>Mis Cursos</span>
+            </a>
+            <a href="/student/assignments" class="menu-item">
+                <i class="fas fa-tasks"></i>
+                <span>Tareas</span>
+            </a>
+            <a href="/student/grades" class="menu-item">
+                <i class="fas fa-star"></i>
+                <span>Calificaciones</span>
+            </a>
+        <% } %>
+    </div>
+
+    <div class="sidebar-footer">
+        <a href="/auth/logout" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Cerrar Sesión</span>
+        </a>
+    </div>
+</div>
+
+<style>
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 1rem;
+}
+
+.sidebar-header img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.sidebar-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.sidebar-header small {
+    color: rgba(255,255,255,0.7);
+    text-transform: capitalize;
+}
+
+.sidebar-menu {
+    flex: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+.menu-item i {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.sidebar-footer {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1rem;
+}
+
+.sidebar-footer .menu-item {
+    color: rgba(255,255,255,0.8);
+}
+
+.sidebar-footer .menu-item:hover {
+    color: white;
+}
+</style> 

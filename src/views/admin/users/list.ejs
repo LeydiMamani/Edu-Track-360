@@ -1,0 +1,82 @@
+<%- include('../../layouts/main', { title: 'Gestión de Usuarios' }) %>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Lista de Usuarios</h6>
+                    <a href="/admin/users/create" class="btn btn-primary btn-sm">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Nuevo Usuario
+                    </a>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Rol</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Estado</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha Registro</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Último Login</th>
+                                    <th class="text-secondary opacity-7"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% users.forEach(user => { %>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div>
+                                                <img src="<%= user.profilePicture %>" class="avatar avatar-sm me-3">
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm"><%= user.firstName %> <%= user.lastName %></h6>
+                                                <p class="text-xs text-secondary mb-0"><%= user.email %></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-gradient-success"><%= user.role %></span>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <% if (user.active) { %>
+                                            <span class="badge badge-sm bg-gradient-success">Activo</span>
+                                        <% } else { %>
+                                            <span class="badge badge-sm bg-gradient-secondary">Inactivo</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            <%= new Date(user.createdAt).toLocaleDateString() %>
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">
+                                            <%= user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Nunca' %>
+                                        </span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div class="ms-auto text-end">
+                                            <a href="/admin/users/edit/<%= user._id %>" class="btn btn-link text-dark px-3 mb-0">
+                                                <i class="fas fa-pencil-alt text-dark me-2"></i>Editar
+                                            </a>
+                                            <a href="/admin/users/delete/<%= user._id %>" 
+                                               class="btn btn-link text-danger text-gradient px-3 mb-0"
+                                               onclick="return confirm('¿Está seguro de eliminar este usuario?');">
+                                                <i class="far fa-trash-alt me-2"></i>Eliminar
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

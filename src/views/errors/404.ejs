@@ -1,0 +1,21 @@
+<%- include('../layouts/main', { title: 'Página no encontrada' }) %>
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center align-items-center min-vh-100">
+        <div class="col-lg-6 text-center">
+            <h1 class="display-1 fw-bold text-primary">404</h1>
+            <h2 class="mb-4">Página no encontrada</h2>
+            <p class="lead mb-5">Lo sentimos, la página que estás buscando no existe o ha sido movida.</p>
+            <a href="/" class="btn btn-primary btn-lg">
+                <i class="fas fa-home me-2"></i>
+                Volver al Inicio
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.min-vh-100 {
+    min-height: calc(100vh - 100px) !important;
+}
+</style> 

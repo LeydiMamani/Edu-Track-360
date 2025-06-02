@@ -1,0 +1,71 @@
+<%- include('../../partials/header') %>
+<%- include('../../partials/sidebar') %>
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Gestión de Cursos</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a href="/admin/courses/new" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Curso
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Profesor</th>
+                                        <th>Horario</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% courses.forEach(course => { %>
+                                        <tr>
+                                            <td><%= course.code %></td>
+                                            <td><%= course.name %></td>
+                                            <td><%= course.teacher.firstName %> <%= course.teacher.lastName %></td>
+                                            <td><%= course.schedule %></td>
+                                            <td>
+                                                <span class="badge badge-<%= course.status === 'active' ? 'success' : course.status === 'inactive' ? 'warning' : 'secondary' %>">
+                                                    <%= course.status %>
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <a href="/admin/courses/edit/<%= course._id %>" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <form action="/admin/courses/delete/<%= course._id %>" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este curso?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %> 

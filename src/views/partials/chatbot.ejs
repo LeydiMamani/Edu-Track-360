@@ -1,0 +1,150 @@
+<!-- Chatbot flotante mejorado -->
+<style>
+#chatbot-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#chatbot-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 320px;
+    height: 450px;
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    overflow: hidden;
+    z-index: 1000;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#chatbot-header {
+    background-color: #2563eb;
+    color: #fff;
+    padding: 12px 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+
+#chatbot-header i {
+    font-size: 18px;
+}
+
+#chatbot-messages {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background-color: #f9fafb;
+}
+
+#chatbot-input {
+    display: flex;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+}
+
+#chatbot-input input {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    border-radius: 0;
+}
+
+#chatbot-input button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0 16px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+#chatbot-messages div {
+    margin-bottom: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+</style>
+
+<!-- Botón flotante -->
+<button id="chatbot-toggle"><i class="fas fa-robot"></i></button>
+
+<!-- Ventana del chatbot -->
+<div id="chatbot-container">
+    <div id="chatbot-header">
+        <i class="fas fa-robot"></i> Asistente Virtual
+    </div>
+    <div id="chatbot-messages"></div>
+    <div id="chatbot-input">
+        <input type="text" id="chatbot-user-input" placeholder="Escribe tu mensaje...">
+        <button id="chatbot-send"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+document.getElementById('chatbot-toggle').addEventListener('click', () => {
+    const container = document.getElementById('chatbot-container');
+    container.style.display = container.style.display === 'flex' ? 'none' : 'flex';
+});
+
+document.getElementById('chatbot-send').addEventListener('click', sendMessage);
+document.getElementById('chatbot-user-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+function sendMessage() {
+    const input = document.getElementById('chatbot-user-input');
+    const message = input.value.trim();
+    if (!message) return;
+
+    appendMessage('Tú', message);
+    input.value = '';
+
+    fetch('/chatbot/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+    })
+    .then(res => res.json())
+    .then(data => appendMessage('Bot', data.reply))
+    .catch(err => {
+        console.error(err);
+        appendMessage('Bot', 'Error al responder.');
+    });
+}
+
+function appendMessage(sender, text) {
+    const container = document.getElementById('chatbot-messages');
+    const div = document.createElement('div');
+    div.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+</script>
+
+<!-- Asegúrate de incluir Font Awesome en tu proyecto -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />

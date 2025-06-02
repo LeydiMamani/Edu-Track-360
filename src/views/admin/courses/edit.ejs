@@ -1,0 +1,108 @@
+<%- include('../../partials/header') %>
+<%- include('../../partials/sidebar') %>
+
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Editar Curso</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a href="/admin/courses" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/admin/courses/edit/<%= course._id %>" method="POST">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Nombre del Curso</label>
+                                            <input type="text" class="form-control" id="name" name="name" value="<%= course.name %>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="code">Código del Curso</label>
+                                            <input type="text" class="form-control" id="code" name="code" value="<%= course.code %>" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Descripción</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" required><%= course.description %></textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="teacher">Profesor</label>
+                                            <select class="form-control" id="teacher" name="teacher" required>
+                                                <option value="">Seleccionar Profesor</option>
+                                                <% teachers.forEach(teacher => { %>
+                                                    <option value="<%= teacher._id %>" <%= course.teacher.equals(teacher._id) ? 'selected' : '' %>>
+                                                        <%= teacher.firstName %> <%= teacher.lastName %>
+                                                    </option>
+                                                <% }) %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="schedule">Horario</label>
+                                            <input type="text" class="form-control" id="schedule" name="schedule" value="<%= course.schedule %>" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="startDate">Fecha de Inicio</label>
+                                            <input type="date" class="form-control" id="startDate" name="startDate" 
+                                                value="<%= course.startDate.toISOString().split('T')[0] %>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="endDate">Fecha de Finalización</label>
+                                            <input type="date" class="form-control" id="endDate" name="endDate" 
+                                                value="<%= course.endDate.toISOString().split('T')[0] %>" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="status">Estado</label>
+                                            <select class="form-control" id="status" name="status" required>
+                                                <option value="active" <%= course.status === 'active' ? 'selected' : '' %>>Activo</option>
+                                                <option value="inactive" <%= course.status === 'inactive' ? 'selected' : '' %>>Inactivo</option>
+                                                <option value="completed" <%= course.status === 'completed' ? 'selected' : '' %>>Completado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Actualizar Curso
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('../../partials/footer') %> 

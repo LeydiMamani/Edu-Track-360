@@ -1,0 +1,220 @@
+<%- include('../layouts/main', { title: 'Panel de Administración' }) %>
+<%- include('../partials/chatbot') %>
+<div class="container-fluid py-4">
+    <!-- Estadísticas -->
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalUsers %></h3>
+                        <p class="stat-label">Total Usuarios</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalTeachers %></h3>
+                        <p class="stat-label">Profesores</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalStudents %></h3>
+                        <p class="stat-label">Estudiantes</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalCourses || 0 %></h3>
+                        <p class="stat-label">Cursos</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="row">
+        <!-- Actividad Reciente -->
+        <div class="col-lg-8 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Actividad Reciente</h5>
+                </div>
+                <div class="card-body">
+                    <% if (recentUsers && recentUsers.length > 0) { %>
+                        <% recentUsers.forEach(user => { %>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h6 class="mb-1"><%= user.firstName %> <%= user.lastName %></h6>
+                                    <p class="mb-0 text-muted"><%= user.email %></p>
+                                </div>
+                                <div class="activity-time">
+                                    <%= new Date(user.createdAt).toLocaleDateString() %>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-center text-muted my-4">No hay actividad reciente</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="col-lg-4 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions">
+                        <a href="/admin/users/create" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h6>Nuevo Usuario</h6>
+                        </a>
+                        <a href="/admin/courses/create" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-book-medical"></i>
+                            </div>
+                            <h6>Nuevo Curso</h6>
+                        </a>
+                        <a href="/admin/reports" class="action-card">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h6>Ver Reportes</h6>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestión de Cursos -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Gestión de Cursos</h5>
+                    <a href="/admin/courses/new" class="btn btn-primary btn-sm">
+                        <i class="fas fa-plus"></i> Nuevo Curso
+                    </a>
+                </div>
+                <div class="card-body">
+                    <% if (courses && courses.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table align-items-center">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Profesor</th>
+                                        <th>Estado</th>
+                                        <th>Estudiantes</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% courses.forEach(course => { %>
+                                        <tr>
+                                            <td><%= course.code %></td>
+                                            <td><%= course.name %></td>
+                                            <td>
+                                                <% if (course.teacher) { %>
+                                                    <%= course.teacher.firstName %> <%= course.teacher.lastName %>
+                                                <% } else { %>
+                                                    No asignado
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-<%= course.status === 'active' ? 'success' : course.status === 'inactive' ? 'warning' : 'secondary' %>">
+                                                    <%= course.status %>
+                                                </span>
+                                            </td>
+                                            <td><%= course.students ? course.students.length : 0 %></td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="/admin/courses/<%= course._id %>" class="btn btn-info btn-sm">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a href="/admin/courses/<%= course._id %>/edit" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteCourse('<%= course._id %>')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-4">
+                            <p class="text-muted mb-0">No hay cursos registrados</p>
+                            <a href="/admin/courses/new" class="btn btn-primary mt-3">
+                                <i class="fas fa-plus"></i> Crear Primer Curso
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para eliminar cursos -->
+<script>
+function deleteCourse(courseId) {
+    if (confirm('¿Estás seguro de que deseas eliminar este curso?')) {
+        fetch(`/admin/courses/${courseId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Error al eliminar el curso');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al eliminar el curso');
+        });
+    }
+}
+</script> 

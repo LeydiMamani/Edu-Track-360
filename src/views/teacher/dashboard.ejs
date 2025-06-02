@@ -1,0 +1,201 @@
+<%- include('../layouts/main', { title: 'Panel del Profesor' }) %>
+
+<div class="container-fluid py-4">
+    <!-- Estadísticas -->
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalCourses || 0 %></h3>
+                        <p class="stat-label">Mis Cursos</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.totalStudents || 0 %></h3>
+                        <p class="stat-label">Estudiantes</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.pendingAssignments || 0 %></h3>
+                        <p class="stat-label">Tareas Pendientes</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="dashboard-stats">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h3 class="stat-number"><%= stats.upcomingEvents || 0 %></h3>
+                        <p class="stat-label">Eventos Próximos</p>
+                    </div>
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="row">
+        <!-- Cursos Actuales -->
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Mis Cursos Actuales</h5>
+                </div>
+                <div class="card-body">
+                    <% if (courses && courses.length > 0) { %>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Curso</th>
+                                        <th>Estudiantes</th>
+                                        <th>Horario</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% courses.forEach(course => { %>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="fas fa-book-open me-2 text-primary"></i>
+                                                    <%= course.name %>
+                                                </div>
+                                            </td>
+                                            <td><%= course.studentCount %> estudiantes</td>
+                                            <td><%= course.schedule %></td>
+                                            <td>
+                                                <a href="/teacher/courses/<%= course._id %>" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-center text-muted my-4">No hay cursos asignados actualmente</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Rápidas -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/teacher/assignments/create" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Nueva Tarea
+                        </a>
+                        <a href="/teacher/grades" class="btn btn-info text-white">
+                            <i class="fas fa-star me-2"></i>
+                            Calificaciones
+                        </a>
+                        <a href="/teacher/attendance" class="btn btn-success">
+                            <i class="fas fa-clipboard-check me-2"></i>
+                            Tomar Asistencia
+                        </a>
+                        <a href="/teacher/reports" class="btn btn-secondary">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Generar Reporte
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Eventos -->
+            <div class="card mt-4">
+                <div class="card-header bg-transparent">
+                    <h5 class="mb-0">Próximos Eventos</h5>
+                </div>
+                <div class="card-body">
+                    <% if (events && events.length > 0) { %>
+                        <% events.forEach(event => { %>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="event-date text-center me-3">
+                                    <div class="month"><%= event.month %></div>
+                                    <div class="day"><%= event.day %></div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0"><%= event.title %></h6>
+                                    <small class="text-muted"><%= event.time %></small>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-center text-muted my-3">No hay eventos próximos</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-stats {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+.stat-label {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+.stat-icon {
+    font-size: 2rem;
+    color: #764ba2;
+    opacity: 0.8;
+}
+.event-date {
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 8px;
+    min-width: 60px;
+}
+.event-date .month {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+.event-date .day {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #764ba2;
+}
+</style> 
